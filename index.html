@@ -20,16 +20,32 @@
         <div class="container">
             <div class="url-input-container">
                 <input type="text" id="videoUrl" placeholder="Paste YouTube, TikTok, or X URL here...">
-                <button id="downloadBtn">Download <i class="fas fa-download"></i></button>
+                <button id="checkUrl">Check <i class="fas fa-search"></i></button>
             </div>
+            
             <div class="supported-platforms">
                 <p>Supported Platforms:</p>
                 <div class="platform-icons">
                     <span class="platform youtube"><i class="fab fa-youtube"></i> YouTube</span>
-                    <span class="platform tiktok"><i class="fab fa-tiktok"></i> TikTok (Coming Soon)</span>
-                    <span class="platform twitter"><i class="fab fa-twitter"></i> X (Coming Soon)</span>
+                    <span class="platform tiktok"><i class="fab fa-tiktok"></i> TikTok (Beta)</span>
+                    <span class="platform twitter"><i class="fab fa-twitter"></i> X (Beta)</span>
                 </div>
             </div>
+
+            <div id="videoInfoContainer" class="hidden">
+                <div class="video-info">
+                    <h3 id="videoTitle">Video Title</h3>
+                    <img id="videoThumbnail" src="" alt="Video Thumbnail">
+                    
+                    <div class="quality-selection">
+                        <label for="qualitySelect">Select Quality:</label>
+                        <select id="qualitySelect"></select>
+                    </div>
+                    
+                    <button id="downloadBtn">Download <i class="fas fa-download"></i></button>
+                </div>
+            </div>
+            
             <div id="progressContainer" class="hidden">
                 <div class="progress-info">
                     <i class="fas fa-spinner fa-spin"></i>
