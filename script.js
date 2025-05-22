@@ -9,21 +9,30 @@ downloadBtn.addEventListener('click', async () => {
         return;
     }
 
-    progressText.textContent = 'Starting download...';
+    progressText.textContent = 'Sending request to server...';
 
     try {
-        // Placeholder for actual download logic
-        // In a real application, this would involve sending the URL to the backend
-        // and handling the download stream.
-        progressText.textContent = `Attempting to download: ${videoUrl}`;
-        alert(`Simulating download for: ${videoUrl}. Backend functionality not yet implemented.`);
-        // Simulate a delay for download
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        progressText.textContent = 'Download (simulated) complete!';
+        const response = await fetch('/download', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ videoUrl }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            progressText.textContent = result.message;
+            alert(result.message); // For now, just alert the simulated message
+        } else {
+            progressText.textContent = `Error: ${result.error}`;
+            alert(`Error: ${result.error}`);
+        }
 
     } catch (error) {
-        console.error('Error during download:', error);
-        progressText.textContent = 'Download failed. See console for details.';
-        alert('Download failed. Check the console for more information.');
+        console.error('Error during download request:', error);
+        progressText.textContent = 'Download request failed. See console for details.';
+        alert('Download request failed. Check the console for more information.');
     }
 });
