@@ -3,22 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Get Vid</title>
+    <title>Get Vid - Video Downloader</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>Get Vid</h1>
+        <div class="logo">
+            <span class="logo-text">Get Vid</span>
+            <span class="logo-icon"><i class="fas fa-download"></i></span>
+        </div>
+        <h1>Easy Video Downloader</h1>
     </header>
     <main>
-        <input type="text" id="videoUrl" placeholder="Enter video URL (YouTube, TikTok, X)">
-        <button id="downloadBtn">Download</button>
-        <div id="progressContainer">
-            <p id="progressText"></p>
+        <div class="container">
+            <div class="url-input-container">
+                <input type="text" id="videoUrl" placeholder="Paste YouTube, TikTok, or X URL here...">
+                <button id="downloadBtn">Download <i class="fas fa-download"></i></button>
+            </div>
+            <div class="supported-platforms">
+                <p>Supported Platforms:</p>
+                <div class="platform-icons">
+                    <span class="platform youtube"><i class="fab fa-youtube"></i> YouTube</span>
+                    <span class="platform tiktok"><i class="fab fa-tiktok"></i> TikTok (Coming Soon)</span>
+                    <span class="platform twitter"><i class="fab fa-twitter"></i> X (Coming Soon)</span>
+                </div>
+            </div>
+            <div id="progressContainer" class="hidden">
+                <div class="progress-info">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span id="progressText">Processing...</span>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
-        <p>&copy; 2024 Get Vid - Open Source</p>
+        <p>&copy; 2024 Get Vid - <a href="https://github.com/emiliancristea/get-vid" target="_blank">Open Source <i class="fab fa-github"></i></a></p>
     </footer>
     <script src="script.js"></script>
 </body>

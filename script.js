@@ -1,15 +1,49 @@
 const videoUrlInput = document.getElementById('videoUrl');
 const downloadBtn = document.getElementById('downloadBtn');
+const progressContainer = document.getElementById('progressContainer');
 const progressText = document.getElementById('progressText');
 
+// Helper function to validate URLs
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+// Show the progress container with a message
+function showProgress(message) {
+    progressText.textContent = message;
+    progressContainer.classList.remove('hidden');
+}
+
+// Hide the progress container
+function hideProgress() {
+    progressContainer.classList.add('hidden');
+}
+
 downloadBtn.addEventListener('click', async () => {
-    const videoUrl = videoUrlInput.value;
+    const videoUrl = videoUrlInput.value.trim();
+    
+    // Validate URL input
     if (!videoUrl) {
         alert('Please enter a video URL');
         return;
     }
-
-    progressText.textContent = 'Requesting video from server...';
+    
+    if (!isValidUrl(videoUrl)) {
+        alert('Please enter a valid URL');
+        return;
+    }
+    
+    // Show progress
+    showProgress('Requesting video from server...');
+    
+    // Disable button during download
+    downloadBtn.disabled = true;
+    downloadBtn.innerHTML = 'Processing... <i class="fas fa-spinner fa-spin"></i>';
 
     try {
         const response = await fetch('/download', {
@@ -22,12 +56,14 @@ downloadBtn.addEventListener('click', async () => {
 
         if (response.ok) {
             // If response is OK, server is streaming the video
-            progressText.textContent = 'Video stream received, preparing download...';
+            showProgress('Video stream received, preparing download...');
+            
             const blob = await response.blob();
             const downloadUrl = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = downloadUrl;
+            
             // Try to get filename from content-disposition header, else default
             const disposition = response.headers.get('content-disposition');
             let filename = 'video.mp4'; // Default filename
@@ -38,23 +74,39 @@ downloadBtn.addEventListener('click', async () => {
                     filename = matches[1].replace(/['"]/g, '');
                 }
             }
+            
             a.download = filename;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(downloadUrl);
             document.body.removeChild(a);
-            progressText.textContent = 'Download started!';
-            alert('Download should start shortly.');
+            
+            showProgress('Download started!');
+            
+            // Reset the download button after a short delay
+            setTimeout(() => {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = 'Download <i class="fas fa-download"></i>';
+                // Optionally hide progress after some time
+                setTimeout(hideProgress, 5000);
+            }, 1000);
+            
         } else {
-            // If server sends an error (e.g., not a YouTube URL, or other server error)
+            // If server sends an error
             const result = await response.json(); // Expect JSON error message
-            progressText.textContent = `Error: ${result.error}`;
-            alert(`Error: ${result.error}`);
+            showProgress(`Error: ${result.error}`);
+            
+            // Reset the download button
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = 'Download <i class="fas fa-download"></i>';
         }
 
     } catch (error) {
         console.error('Error during download request:', error);
-        progressText.textContent = 'Download request failed. See console for details.';
-        alert('Download request failed. Check the console for more information.');
+        showProgress('Download request failed. See console for details.');
+        
+        // Reset the download button
+        downloadBtn.disabled = false;
+        downloadBtn.innerHTML = 'Download <i class="fas fa-download"></i>';
     }
 });
